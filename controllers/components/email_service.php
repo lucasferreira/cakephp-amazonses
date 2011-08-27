@@ -29,6 +29,7 @@ App::import('Component', 'Email');
 class EmailServiceComponent extends EmailComponent { 
     
 	var $ses_options = array();
+	var $response = null;
 
 	function getAmazonSES()
 	{
@@ -65,12 +66,12 @@ class EmailServiceComponent extends EmailComponent {
 			'Source' => $this->from 
 		));
 		
-		$response = $ses->send_raw_email(array('Data' => $data), $options); 
+		$this->response = $ses->send_raw_email(array('Data' => $data), $options); 
 		
-		$ok = $response->isOK(); 
+		$ok = $this->response->isOK(); 
 		if(!$ok)
 		{ 
-			$this->log('Error sending raw email from AWS SES: ' . $response->body->asXML(), 'debug'); 
+			$this->log('Error sending raw email from AWS SES: ' . $this->response->body->asXML(), 'debug'); 
 		}
 		
 		return $ok;
@@ -126,11 +127,11 @@ class EmailServiceComponent extends EmailComponent {
 			); 
 		} 
 		
-		$response = $ses->send_email($this->from, $destination, $message, $options); 
-		$ok = $response->isOK(); 
+		$this->response = $ses->send_email($this->from, $destination, $message, $options); 
+		$ok = $this->response->isOK(); 
 		if(!$ok)
 		{ 
-			$this->log('Error sending email from AWS SES: ' . $response->body->asXML(), 'debug'); 
+			$this->log('Error sending email from AWS SES: ' . $this->response->body->asXML(), 'debug'); 
 		}
 		
 		return $ok; 
@@ -140,11 +141,11 @@ class EmailServiceComponent extends EmailComponent {
 	{
 		$ses = $this->getAmazonSES();
 		
-		$response = $ses->verify_email_address($email, $this->ses_options); 
-		$ok = $response->isOK(); 
+		$this->response = $ses->verify_email_address($email, $this->ses_options); 
+		$ok = $this->response->isOK(); 
 		if(!$ok)
 		{ 
-			$this->log('Error verify email address from AWS SES: ' . $response->body->asXML(), 'debug'); 
+			$this->log('Error verify email address from AWS SES: ' . $this->response->body->asXML(), 'debug'); 
 		}
 		
 		return $ok;
@@ -154,11 +155,11 @@ class EmailServiceComponent extends EmailComponent {
 	{
 		$ses = $this->getAmazonSES();
 		
-		$response = $ses->delete_verified_email_address($email, $this->ses_options); 
-		$ok = $response->isOK(); 
+		$this->response = $ses->delete_verified_email_address($email, $this->ses_options); 
+		$ok = $this->response->isOK(); 
 		if(!$ok)
 		{ 
-			$this->log('Error delete_verified_email_address from AWS SES: ' . $response->body->asXML(), 'debug'); 
+			$this->log('Error delete_verified_email_address from AWS SES: ' . $this->response->body->asXML(), 'debug'); 
 		}
 		
 		return $ok;
@@ -168,42 +169,42 @@ class EmailServiceComponent extends EmailComponent {
 	{
 		$ses = $this->getAmazonSES();
 		
-		$response = $ses->list_verified_email_addresses($this->ses_options); 
-		$ok = $response->isOK(); 
+		$this->response = $ses->list_verified_email_addresses($this->ses_options); 
+		$ok = $this->response->isOK(); 
 		if(!$ok)
 		{ 
-			$this->log('Error list_verified_email_addresses from AWS SES: ' . $response->body->asXML(), 'debug'); 
+			$this->log('Error list_verified_email_addresses from AWS SES: ' . $this->response->body->asXML(), 'debug'); 
 		}
 		
-		return $response->body;
+		return $this->response->body;
 	}
 	
 	function getSendQuota()
 	{
 		$ses = $this->getAmazonSES();
 		
-		$response = $ses->get_send_quota($this->ses_options); 
-		$ok = $response->isOK(); 
+		$this->response = $ses->get_send_quota($this->ses_options); 
+		$ok = $this->response->isOK(); 
 		if(!$ok)
 		{ 
-			$this->log('Error get send quota from AWS SES: ' . $response->body->asXML(), 'debug'); 
+			$this->log('Error get send quota from AWS SES: ' . $this->response->body->asXML(), 'debug'); 
 		}
 		
-		return $response->body;
+		return $this->response->body;
 	}
 	
 	function getSendStatistics()
 	{
 		$ses = $this->getAmazonSES();
 		
-		$response = $ses->get_send_statistics($this->ses_options); 
-		$ok = $response->isOK(); 
+		$this->response = $ses->get_send_statistics($this->ses_options); 
+		$ok = $this->response->isOK(); 
 		if(!$ok)
 		{ 
-			$this->log('Error get send statistics from AWS SES: ' . $response->body->asXML(), 'debug'); 
+			$this->log('Error get send statistics from AWS SES: ' . $this->response->body->asXML(), 'debug'); 
 		}
 		
-		return $response->body;
+		return $this->response->body;
 	}
     
 }
