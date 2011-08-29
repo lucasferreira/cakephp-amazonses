@@ -2,7 +2,7 @@
 /**
  * Email Service Component class for Amazon SES
  *
- * Send e-mails with Amazon SES
+ * Send e-mails with Amazon Simple Email Service
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
@@ -14,7 +14,7 @@
  * Load EmailService in your controller components
  * var $components = array('EmailService');
  *
- * In your action choose aws_ses as delivery option
+ * In your actions choose aws_ses as delivery method
  * $this->EmailService->delivery = 'aws_ses'; // or 'aws_ses_raw' if you want complex e-mail with attachments
  *
  * @author Lucas Ferreira
